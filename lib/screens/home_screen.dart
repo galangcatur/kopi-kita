@@ -3,6 +3,8 @@ import 'package:flutter_application_1/widgets/home_bottem.dart';
 import 'package:flutter_application_1/widgets/item_widget.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key); // ✅ tambahkan Key
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -33,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(top: 20),
@@ -63,9 +66,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ],
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
+              SizedBox(height: 30),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
@@ -84,26 +85,25 @@ class _HomeScreenState extends State<HomeScreen>
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 50, 54, 56),
-                  borderRadius: BorderRadius.circular(10)
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextFormField(
+                  style: TextStyle(color: Colors.white), 
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Find Your Coffee",
                     hintStyle: TextStyle(
                       color: Colors.white.withOpacity(0.5),
                     ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 30,
-                    color: Colors.white.withOpacity(0.5)
-                  )
+                    prefixIcon: Icon(
+                      Icons.search,
+                      size: 30,
+                      color: Colors.white.withOpacity(0.5),
+                    ),
                   ),
                 ),
               ),
-               SizedBox(
-                height: 5,
-              ),
+              SizedBox(height: 5),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
               TabBar(
-                controller: _tabController, 
+                controller: _tabController,
                 labelColor: Color(0xFFE57734),
                 unselectedLabelColor: Colors.white.withOpacity(0.5),
                 isScrollable: true,
@@ -124,15 +124,17 @@ class _HomeScreenState extends State<HomeScreen>
                 indicator: BoxDecoration(
                   color: Colors.transparent,
                 ),
-                labelStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                labelPadding: EdgeInsets.symmetric(horizontal:20),
+                labelStyle:
+                    TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+                labelPadding: EdgeInsets.symmetric(horizontal: 20),
                 tabs: [
-                Tab(text: "Americano",),
-                Tab(text: "Cappucino",),
-                Tab(text: "Expresso",),
-                Tab(text: "Arabika",),
-              ]),
-              SizedBox(height: 10,),
+                  Tab(text: "Americano"),
+                  Tab(text: "Cappucino"),
+                  Tab(text: "Expresso"),
+                  Tab(text: "Arabikap"),
+                ],
+              ),
+              SizedBox(height: 10),
               Center(
                 child: [
                   ItemWidget(),
@@ -140,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ItemWidget(),
                   ItemWidget(),
                 ][_tabController.index],
-              )
+              ),
             ],
           ),
         ),
