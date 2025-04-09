@@ -4,6 +4,8 @@ import 'package:flutter_application_1/widgets/item_widget.dart';
 import 'package:flutter_application_1/widgets/second_item.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key); // ✅ tambahkan Key
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -35,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(top: size.height * 0.02),
@@ -88,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen>
                     color: Color.fromARGB(255, 50, 54, 56),
                     borderRadius: BorderRadius.circular(10)),
                 child: TextFormField(
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: "Find Your Coffee",

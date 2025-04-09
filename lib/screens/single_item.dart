@@ -215,5 +215,9 @@ class SingleItem extends StatelessWidget {
         ),
       ),
     );
+        ),
+      ),
+    );
   }
 }
+
