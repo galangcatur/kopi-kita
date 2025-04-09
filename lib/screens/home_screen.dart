@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/home_bottem.dart';
 import 'package:flutter_application_1/widgets/item_widget.dart';
+import 'package:flutter_application_1/widgets/second_item.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,14 +33,15 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: EdgeInsets.only(top: size.height * 0.02),
           child: ListView(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen>
                       child: Icon(
                         Icons.person,
                         color: Colors.white.withOpacity(0.5),
-                        size: 50,
+                        size: size.width * 0.12,
                       ),
                     ),
                     Spacer(),
@@ -57,90 +59,147 @@ class _HomeScreenState extends State<HomeScreen>
                       child: Icon(
                         Icons.search,
                         color: Colors.white.withOpacity(0.5),
-                        size: 50,
+                        size: size.width * 0.12,
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
+              SizedBox(height: size.height * 0.04),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
                 child: Text(
                   "Find The Best\nCoffee For You",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 40,
+                    fontSize: size.width * 0.08,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                width: MediaQuery.of(context).size.width,
-                height: 40,
+                margin: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.04,
+                    vertical: size.height * 0.02),
+                width: size.width,
+                height: size.height * 0.06,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 50, 54, 56),
-                  borderRadius: BorderRadius.circular(10)
-                ),
+                    color: Color.fromARGB(255, 50, 54, 56),
+                    borderRadius: BorderRadius.circular(10)),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Find Your Coffee",
-                    hintStyle: TextStyle(
-                      color: Colors.white.withOpacity(0.5),
-                    ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 30,
-                    color: Colors.white.withOpacity(0.5)
-                  )
-                  ),
+                      border: InputBorder.none,
+                      hintText: "Find Your Coffee",
+                      hintStyle: TextStyle(
+                        color: Colors.white.withOpacity(0.5),
+                      ),
+                      prefixIcon: Icon(Icons.search,
+                          size: size.width * 0.08,
+                          color: Colors.white.withOpacity(0.5))),
                 ),
               ),
-               SizedBox(
-                height: 5,
-              ),
+              SizedBox(height: size.height * 0.01),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
                 child: Text(
                   "Categories",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25,
+                    fontSize: size.width * 0.06,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-              TabBar(
-                controller: _tabController, 
-                labelColor: Color(0xFFE57734),
-                unselectedLabelColor: Colors.white.withOpacity(0.5),
-                isScrollable: true,
-                dividerColor: Colors.transparent,
-                indicator: BoxDecoration(
-                  color: Colors.transparent,
+
+              // Tambahkan Background di Belakang TabBar
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: size.width * 0.04),
+                padding: EdgeInsets.all(
+                    size.width * 0.02), // Padding untuk background utama TabBar
+                child: TabBar(
+                  controller: _tabController,
+                  labelColor: Colors.white,
+                  unselectedLabelColor: Colors.white.withOpacity(0.5),
+                  isScrollable: true,
+                  dividerColor: Colors.transparent,
+                  indicator: BoxDecoration(
+                    color: Color(
+                        0xFFE57734), // Warna background per tab item yang aktif
+                    borderRadius:
+                        BorderRadius.circular(12), // Membuat efek rounded
+                  ),
+                  indicatorPadding: EdgeInsets.symmetric(
+                      vertical: size.height * 0.006,
+                      horizontal: size.width *
+                          0.005), // Menambah jarak background dari teks
+                  labelStyle: TextStyle(
+                      fontSize: size.width * 0.05, fontWeight: FontWeight.w500),
+                  labelPadding:
+                      EdgeInsets.symmetric(horizontal: size.width * 0.02),
+                  tabs: [
+                    Tab(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: size.height * 0.01,
+                            horizontal: size.width *
+                                0.05), // Padding untuk memberi margin dalam tab
+                        child: Text("Americano"),
+                      ),
+                    ),
+                    Tab(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: size.height * 0.01,
+                            horizontal: size.width * 0.05),
+                        child: Text("Cappuccino"),
+                      ),
+                    ),
+                    Tab(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: size.height * 0.01,
+                            horizontal: size.width * 0.05),
+                        child: Text("Espresso"),
+                      ),
+                    ),
+                    Tab(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: size.height * 0.01,
+                            horizontal: size.width * 0.05),
+                        child: Text("Arabika"),
+                      ),
+                    ),
+                  ],
                 ),
-                labelStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-                labelPadding: EdgeInsets.symmetric(horizontal:20),
-                tabs: [
-                Tab(text: "Americano",),
-                Tab(text: "Cappucino",),
-                Tab(text: "Expresso",),
-                Tab(text: "Arabika",),
-              ]),
-              SizedBox(height: 10,),
-              Center(
-                child: [
-                  ItemWidget(),
-                  ItemWidget(),
-                  ItemWidget(),
-                  ItemWidget(),
-                ][_tabController.index],
-              )
+              ),
+
+              SizedBox(height: size.height * 0.02),
+
+              // Menampilkan 4 ItemWidget
+              ItemWidget(),
+              SizedBox(
+                  height:
+                      size.height * 0.03), // Beri jarak sebelum Recommendations
+
+              // Teks "Recommendations"
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                child: Text(
+                  "Recommendations",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: size.width * 0.06,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              SizedBox(height: size.height * 0.02), // Jarak setelah teks
+
+              // Menampilkan 4 SecondItem
+              SecondItem(),
+              SecondItem(),
             ],
           ),
         ),
