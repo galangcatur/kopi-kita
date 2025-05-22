@@ -4,6 +4,8 @@ import 'package:flutter_application_1/screens/bag_screen.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 
 class HomeBottem extends StatelessWidget {
+  const HomeBottem({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

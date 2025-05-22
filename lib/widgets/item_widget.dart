@@ -1,122 +1,112 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/product.dart';
+import 'package:flutter_application_1/services/product_service.dart';
 import 'package:flutter_application_1/screens/single_item.dart';
 
-class ItemWidget extends StatelessWidget {
-  List img = [
-    'Cappucino',
-    'Latte',
-    'Matcha',
-    'Robusta',
-  ];
+class ItemWidget extends StatefulWidget {
+  final String categoryName;
+
+  const ItemWidget({Key? key, required this.categoryName}) : super(key: key);
+
+  @override
+  _ItemWidgetState createState() => _ItemWidgetState();
+}
+
+class _ItemWidgetState extends State<ItemWidget> {
+  List<Product> _products = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProductsByCategory();
+  }
+
+  @override
+  void didUpdateWidget(covariant ItemWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.categoryName != widget.categoryName) {
+      fetchProductsByCategory();
+    }
+  }
+
+  Future<void> fetchProductsByCategory() async {
+    setState(() => _isLoading = true);
+    try {
+      final products = await ProductService.fetchProducts(
+        categoryName: widget.categoryName,
+      );
+      setState(() {
+        _products = products;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print("Gagal load produk: $e");
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-    return GridView.count(
-      physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      childAspectRatio: screenWidth < 600 ? (148 / 195) : (160 / 210),
-      mainAxisSpacing: screenHeight * 0.03,
-      children: [
-        for (int i = 0; i < img.length; i++)
-          Container(
-            padding: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.005, horizontal: screenWidth * 0.04),
-            margin: EdgeInsets.symmetric(
-                vertical: screenHeight * 0.005,
-                horizontal: screenWidth * 0.035),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Color(0xFF212325),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.4),
-                  spreadRadius: 1,
-                  blurRadius: 8,
+    if (_products.isEmpty) {
+      return const Center(
+        child: Text(
+          "Tidak ada produk di kategori ini",
+          style: TextStyle(color: Colors.white),
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: 200,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _products.length,
+        itemBuilder: (context, index) {
+          final product = _products[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SingleItem(product),
                 ),
-              ],
-            ),
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SingleItem(img[i])));
-                  },
-                  child: Container(
-                    child: Image.asset(
-                      "images/${img[i]}.png",
-                      width: screenWidth * 0.4,
-                      height: screenHeight * 0.2,
-                      fit: BoxFit.contain,
+              );
+            },
+            child: Container(
+              width: 160,
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey[800],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Image.network(
+                      product.foto,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: screenHeight * 0.005),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          img[i],
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.045,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          "Wite Chocolate",
-                          style: TextStyle(
-                            fontSize: screenWidth * 0.04,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      product.nama,
+                      style: const TextStyle(color: Colors.white),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.005),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "\$30",
-                        style: TextStyle(
-                          fontSize: screenWidth * 0.05,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(screenWidth * 0.025),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE57734),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Icon(
-                          CupertinoIcons.bag,
-                          size: screenWidth * 0.06,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          )
-      ],
+          );
+        },
+      ),
     );
   }
 }

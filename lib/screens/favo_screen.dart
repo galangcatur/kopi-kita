@@ -105,10 +105,10 @@ class _FavoScreenState extends State<FavoScreen>
             children: [
               Center(
                 child: [
-                  ItemWidget(),
-                  ItemWidget(),
-                  ItemWidget(),
-                  ItemWidget(),
+                  ItemWidget(categoryName: 'Cappucino'),
+                  ItemWidget(categoryName: 'Expresso'),
+                  ItemWidget(categoryName: 'Latte'),
+                  ItemWidget(categoryName: 'Americano'),
                 ][_tabController.index],
               )
             ],

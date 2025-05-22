@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/widgets/home_bottem.dart';
-import 'package:flutter_application_1/widgets/second_item.dart';
+import 'package:flutter_application_1/providers/cart_provider.dart';
+import 'package:provider/provider.dart';
 
 class BagScreen extends StatefulWidget {
   @override
@@ -10,92 +11,141 @@ class BagScreen extends StatefulWidget {
 class _BagScreenState extends State<BagScreen> {
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        backgroundColor: const Color(0xFF212325),
+        title: const Text(
           "Bag",
           style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Color(0xFF212325), // Warna AppBar
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu, color: Colors.white),
-            onPressed: () {
-              Scaffold.of(context).openDrawer(); // Buka Drawer
-            },
-          ),
-        ),
-      ),
-      drawer: Drawer(
-        backgroundColor: Color(0xFF212325), // Background Drawer
-        child: Column(
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF212325), // Header warna lebih gelap
-              ),
-              child: Center(
-                child: Text(
-                  "Bag",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.favorite, color: Colors.white),
-              title: Text(
-                "My Bag",
-                style: TextStyle(color: Colors.white),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings, color: Colors.white),
-              title: Text(
-                "Settings",
-                style: TextStyle(color: Colors.white),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout, color: Colors.white),
-              title: Text(
-                "Logout",
-                style: TextStyle(color: Colors.white),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(size.width * 0.02), // Padding agar lebih rapi
-          child: ListView.builder(
-            itemCount: 4, // Menampilkan 4 item
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.only(
-                    bottom: size.height * 0.01), // Jarak antar item
-                child: SecondItem(),
+          padding: EdgeInsets.all(size.width * 0.02),
+          child: Consumer<CartProvider>(
+            builder: (context, cart, _) {
+              final items = cart.cartItems;
+
+              if (items.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "Keranjang kosong",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+
+                  return Column(
+                    children: [
+                      Container(
+                        height: size.height * 0.25,
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 15),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF212325),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 6,
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            // Gambar produk
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                item.foto,
+                                width: size.height * 0.15,
+                                height: size.height * 0.15,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+
+                            // Info produk
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.nama,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    item.deskripsi.isNotEmpty
+                                        ? item.deskripsi
+                                        : item.category,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "Rp ${item.harga}",
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // Tombol delete
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: InkWell(
+                                onTap: () => cart.removeFromCart(item),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.redAccent,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Icon(
+                                    Icons.delete,
+                                    size: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  );
+                },
               );
             },
           ),
         ),
       ),
-      bottomNavigationBar: HomeBottem(),
     );
   }
 }
